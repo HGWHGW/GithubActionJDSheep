@@ -42,17 +42,17 @@ headers = {"Connection": 'keep-alive',
            }
 
 response = requests.post(url=url, headers=headers)
-print(response.text)
+# print(response.text)
 print("??????????")
 json_data_match = re.search(r'$(.*)$', response.text)
 if json_data_match:
     json_data = json_data_match.group(1)
     print(json_data)
     # 解析提取出的 JSON 数据
-    data = json.loads(json_data)
+    # data = json.loads(json_data)
     
     # 打印解析后的 JSON 数据
-    print(data)
+    # print(data)
 else:
     print("未找到有效的 JSON 数据部分")
 
