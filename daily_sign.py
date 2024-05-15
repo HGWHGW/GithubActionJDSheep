@@ -42,24 +42,24 @@ headers = {"Connection": 'keep-alive',
            }
 
 response = requests.post(url=url, headers=headers)
-# print(response.text)
+print(response.text)
 print("??????????")
-json_data_match = re.search(r'$(.*)$', response.text)
+json_data_match = re.search(r'\((.*?)\)', text1)
 if json_data_match:
     json_data = json_data_match.group(1)
     print(json_data)
     # 解析提取出的 JSON 数据
-    # data = json.loads(json_data)
+    data = json.loads(json_data)
     
     # 打印解析后的 JSON 数据
-    # print(data)
+    print(data)
 else:
     print("未找到有效的 JSON 数据部分")
 
 try:
     if response.status_code =='200':
-        title = reponse.text.data.dailyAward.title
-        text = reponse.text.data.dailyAward.subTitle + reponse.text.data.dailyAward.beanAward.beanCount
+        title = data["data"]["dailyAward"]["title"]
+        text = data["data"]["dailyAward"]["subTitle"]+" "+ data["data"]["dailyAward"]["beanAward"]["beanCount"]
     else:
         title = str(response.status_code)
         text = "error"
@@ -68,5 +68,5 @@ except Exception as error_name:
     text = str(error_name)
     print(error_name)
 
-# req = wechat_send(title, text)
+req = wechat_send(title, text)
 
