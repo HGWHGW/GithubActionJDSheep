@@ -41,16 +41,20 @@ headers = {"Connection": 'keep-alive',
 
 response = requests.post(url=url, headers=headers)
 print(response.text)
+print("??????????")
+data = reponse.json()
+print(data)
 try:
-    if response.status =='200':
+    if response.status_code =='200':
         title = reponse.text.data.dailyAward.title
         text = reponse.text.data.dailyAward.subTitle + reponse.text.data.dailyAward.beanAward.beanCount
     else:
-        title = str(response.status)
+        title = str(response.status_code)
         text = "error"
 except Exception as error_name:
     title = "program error!"
     text = str(error_name)
+    print(error_name)
 
-req = wechat_send(title, text)
+# req = wechat_send(title, text)
 
