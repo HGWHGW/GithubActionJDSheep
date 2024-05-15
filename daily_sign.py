@@ -42,6 +42,6 @@ headers = {"Connection": 'keep-alive',
 response = requests.post(url=url, headers=headers)
 print(response.text)
 print("???????")
-print(reponse)
+print(response)
 # title = reponse.title
 
