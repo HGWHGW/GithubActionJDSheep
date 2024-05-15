@@ -1,5 +1,6 @@
 import os
 import requests
+import re
 
 #  配置你的SendKey
 send_key = os.environ.get("PUSH_KEY")
@@ -42,8 +43,18 @@ headers = {"Connection": 'keep-alive',
 response = requests.post(url=url, headers=headers)
 print(response.text)
 print("??????????")
-data = response.json()
-print(data)
+json_data_match = re.search(r'$(.*)$', response_text)
+if json_data_match:
+    json_data = json_data_match.group(1)
+    
+    # 解析提取出的 JSON 数据
+    data = json.loads(json_data)
+    
+    # 打印解析后的 JSON 数据
+    print(data)
+else:
+    print("未找到有效的 JSON 数据部分")
+
 try:
     if response.status_code =='200':
         title = reponse.text.data.dailyAward.title
