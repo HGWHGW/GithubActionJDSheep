@@ -7,7 +7,7 @@ send_key = os.environ.get("PUSH_KEY")
 # Python3通过 Server酱 的API接口让你的消息推送到你的微信。
 # encoding:utf-8
 def wechat_send(ftqq_title, ftqq_text):  # 发微信消息
-    api = 'https://sctapi.ftqq.com/' + SendKey + '.send'
+    api = 'https://sctapi.ftqq.com/' + send_key + '.send'
     if ftqq_title != '':
         title = ftqq_title
     else:
