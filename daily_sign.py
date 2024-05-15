@@ -1,6 +1,26 @@
 import os
 import requests
 
+#  配置你的SendKey
+send_key = os.environ.get("PUSH_KEY")
+
+# Python3通过 Server酱 的API接口让你的消息推送到你的微信。
+# encoding:utf-8
+def wechat_send(ftqq_title, ftqq_text):  # 发微信消息
+    api = 'https://sctapi.ftqq.com/' + SendKey + '.send'
+    if ftqq_title != '':
+        title = ftqq_title
+    else:
+        title = '默认通知标题'
+    if ftqq_text != '':
+        text = ftqq_text
+    else:
+        text = '默认文本内容'
+    # 发送数据内容
+    data = {'text': title.encode('utf-8'), 'desp': text.encode('utf-8')}
+    req = requests.post(api, data=data)  # req 为200表示发送成功
+    return req
+
 cookie = os.environ.get("JD_COOKIE")
 
 url = ("https://api.m.jd.com/client.action?functionId=signBeanAct&body=%7B%22fp%22%3A%22-1%22%2C%22shshshfp%22%3A%22-1"
@@ -21,3 +41,7 @@ headers = {"Connection": 'keep-alive',
 
 response = requests.post(url=url, headers=headers)
 print(response.text)
+print("???????")
+print(reponse)
+# title = reponse.title
+
