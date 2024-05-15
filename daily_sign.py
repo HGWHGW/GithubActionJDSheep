@@ -44,7 +44,7 @@ headers = {"Connection": 'keep-alive',
 response = requests.post(url=url, headers=headers)
 print(response.text)
 print("??????????")
-json_data_match = re.search(r'\((.*?)\)', text1)
+json_data_match = re.search(r'\((.*?)\)', response.text)
 if json_data_match:
     json_data = json_data_match.group(1)
     print(json_data)
