@@ -47,7 +47,7 @@ print("??????????")
 json_data_match = re.search(r'$(.*)$', response.text)
 if json_data_match:
     json_data = json_data_match.group(1)
-    
+    print(json_data)
     # 解析提取出的 JSON 数据
     data = json.loads(json_data)
     
