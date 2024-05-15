@@ -42,7 +42,7 @@ headers = {"Connection": 'keep-alive',
 response = requests.post(url=url, headers=headers)
 print(response.text)
 print("??????????")
-data = reponse.json()
+data = response.json()
 print(data)
 try:
     if response.status_code =='200':
