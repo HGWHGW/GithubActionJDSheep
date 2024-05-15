@@ -48,9 +48,9 @@ try:
     else:
         title = str(response.status)
         text = "error"
-except ExceptionName as error_name:
+except Exception as error_name:
     title = "program error!"
-    text = error_name
+    text = str(error_name)
 
 req = wechat_send(title, text)
 
