@@ -57,7 +57,7 @@ else:
     print("未找到有效的 JSON 数据部分")
 
 try:
-    if response.status_code =='200':
+    if response.status_code == 200:
         title = data["data"]["dailyAward"]["title"]
         text = data["data"]["dailyAward"]["subTitle"]+" "+ data["data"]["dailyAward"]["beanAward"]["beanCount"]
     else:
