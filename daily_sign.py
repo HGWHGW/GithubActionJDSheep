@@ -2,9 +2,11 @@ import os
 import requests
 import re
 import json
+import time
 
 #  配置你的SendKey
 send_key = os.environ.get("PUSH_KEY")
+
 
 # Python3通过 Server酱 的API接口让你的消息推送到你的微信。
 # encoding:utf-8
@@ -22,6 +24,26 @@ def wechat_send(ftqq_title, ftqq_text):  # 发微信消息
     data = {'text': title.encode('utf-8'), 'desp': text.encode('utf-8')}
     req = requests.post(api, data=data)  # req 为200表示发送成功
     return req
+
+
+def get_json_message(url, headers):
+    response1 = requests.post(url=url, headers=headers)
+    print(response1.text)
+    print("------------------------------")
+    json_data_match = re.search(r'\((.*?)\)', response1.text)
+    if json_data_match:
+        json_data = json_data_match.group(1)
+        print(json_data)
+        # 解析提取出的 JSON 数据
+        json_data = json.loads(json_data)
+
+        # 打印解析后的 JSON 数据
+        print(json_data)
+    else:
+        json_data = None
+        print("未找到有效的 JSON 数据部分")
+    return response1, json_data
+
 
 cookie = os.environ.get("JD_COOKIE")
 
@@ -41,32 +63,26 @@ headers = {"Connection": 'keep-alive',
            "Cookie": cookie
            }
 
-response = requests.post(url=url, headers=headers)
-print(response.text)
-print("??????????")
-json_data_match = re.search(r'\((.*?)\)', response.text)
-if json_data_match:
-    json_data = json_data_match.group(1)
-    print(json_data)
-    # 解析提取出的 JSON 数据
-    data = json.loads(json_data)
-    
-    # 打印解析后的 JSON 数据
-    print(data)
-else:
-    print("未找到有效的 JSON 数据部分")
-
+response, data = get_json_message(url, headers)
 try:
     if response.status_code == 200:
         title = data["data"]["dailyAward"]["title"]
-        text = data["data"]["dailyAward"]["subTitle"]+" "+ data["data"]["dailyAward"]["beanAward"]["beanCount"]
+        text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"]["beanCount"]
+    elif data["code"] == '402':  # 活动繁忙
+        for i in range(3):
+            response, data = get_json_message(url, headers)
+            if response.status_code == 200:
+                title = data["data"]["dailyAward"]["title"]
+                text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"][
+                    "beanCount"]
+                break
+            time.sleep(10)
     else:
         title = str(response.status_code)
-        text = "error"
+        text = "error\n" + response.text
 except Exception as error_name:
     title = "program error!"
-    text = str(error_name)
-    print(error_name)
+    text = str(error_name)+"\n"+response.text
+    print(text)
 
 req = wechat_send(title, text)
-
