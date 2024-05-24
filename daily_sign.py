@@ -66,17 +66,18 @@ headers = {"Connection": 'keep-alive',
 response, data = get_json_message(url, headers)
 try:
     if response.status_code == 200:
-        title = data["data"]["dailyAward"]["title"]
-        text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"]["beanCount"]
-    elif data["code"] == '402':  # 活动繁忙
-        for i in range(3):
-            response, data = get_json_message(url, headers)
-            if response.status_code == 200:
-                title = data["data"]["dailyAward"]["title"]
-                text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"][
-                    "beanCount"]
-                break
-            time.sleep(10)
+        if data["code"] == '402':  # 活动繁忙
+            for i in range(3):
+                response, data = get_json_message(url, headers)
+                if data["code"] == '402':
+                    title = data["data"]["dailyAward"]["title"]
+                    text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"][
+                        "beanCount"]
+                    break
+                time.sleep(600)
+        else:
+            title = data["data"]["dailyAward"]["title"]
+            text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"]["beanCount"]
     else:
         title = str(response.status_code)
         text = "error\n" + response.text
