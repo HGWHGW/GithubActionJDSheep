@@ -68,6 +68,7 @@ try:
     if response.status_code == 200:
         if data["code"] == '402':  # 活动繁忙
             for i in range(3):
+                print(r"第{i+1}次重连...")
                 response, data = get_json_message(url, headers)
                 if data["code"] == '402':
                     title = data["data"]["dailyAward"]["title"]
