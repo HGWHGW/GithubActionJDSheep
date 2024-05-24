@@ -75,7 +75,7 @@ try:
             for i in range(3):
                 print(r'第{i}次重连')
                 response, data = get_json_message(url, headers)
-                if data["code"] == '402':
+                if data["code"] != '402':
                     title = data["data"]["dailyAward"]["title"]
                     text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"][
                         "beanCount"]
