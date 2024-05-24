@@ -35,12 +35,13 @@ def get_json_message(url, headers):
     json_data_match = re.search(pattern, response1.text, re.DOTALL)
     if json_data_match:
         json_data = json_data_match.group(0)
-        print(json_data)
         # 解析提取出的 JSON 数据
         json_data = json.loads(json_data)
 
         # 打印解析后的 JSON 数据
+        print("解析后的JSON为：")
         print(json_data)
+        print("------------------------------")
     else:
         json_data = None
         print("未找到有效的 JSON 数据部分")
@@ -89,6 +90,7 @@ try:
 except Exception as error_name:
     title = "program error!"
     text = str(error_name) + "\n" + response.text
+    print("程序错误信息：")
     print(text)
 
 req = wechat_send(title, text)
