@@ -28,9 +28,11 @@ def wechat_send(ftqq_title, ftqq_text):  # 发微信消息
 
 def get_json_message(url, headers):
     response1 = requests.post(url=url, headers=headers)
+    print("reponse.text为：")
     print(response1.text)
     print("------------------------------")
-    json_data_match = re.search(r'\((.*?)\)', response1.text)
+    pattern = r'\{.*\}'
+    json_data_match = re.search(pattern, response1.text, re.DOTALL)
     if json_data_match:
         json_data = json_data_match.group(1)
         print(json_data)
@@ -42,6 +44,7 @@ def get_json_message(url, headers):
     else:
         json_data = None
         print("未找到有效的 JSON 数据部分")
+        print("------------------------------")
     return response1, json_data
 
 
@@ -66,9 +69,10 @@ headers = {"Connection": 'keep-alive',
 response, data = get_json_message(url, headers)
 try:
     if response.status_code == 200:
+        print("状态码200")
         if data["code"] == '402':  # 活动繁忙
             for i in range(3):
-                print(r"第{i+1}次重连...")
+                print(r'第{i}次重连')
                 response, data = get_json_message(url, headers)
                 if data["code"] == '402':
                     title = data["data"]["dailyAward"]["title"]
@@ -84,7 +88,7 @@ try:
         text = "error\n" + response.text
 except Exception as error_name:
     title = "program error!"
-    text = str(error_name)+"\n"+response.text
+    text = str(error_name) + "\n" + response.text
     print(text)
 
 req = wechat_send(title, text)
