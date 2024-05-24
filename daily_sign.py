@@ -34,7 +34,7 @@ def get_json_message(url, headers):
     pattern = r'\{.*\}'
     json_data_match = re.search(pattern, response1.text, re.DOTALL)
     if json_data_match:
-        json_data = json_data_match.group(1)
+        json_data = json_data_match.group(0)
         print(json_data)
         # 解析提取出的 JSON 数据
         json_data = json.loads(json_data)
