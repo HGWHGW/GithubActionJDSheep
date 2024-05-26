@@ -72,15 +72,14 @@ try:
     if response.status_code == 200:
         print("状态码200")
         if data["code"] == '402':  # 活动繁忙
-            for i in range(3):
-                print(r'第{i}次重连')
-                response, data = get_json_message(url, headers)
-                if data["code"] != '402':
-                    title = data["data"]["dailyAward"]["title"]
-                    text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"][
-                        "beanCount"]
-                    break
-                time.sleep(600)
+            response, data = get_json_message(url, headers)
+            if data["code"] != '402':
+                title = data["data"]["dailyAward"]["title"]
+                text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"][
+                    "beanCount"]
+            else:
+                title = "responseCode:"+ str(response.status_code)+" JDcode:"+str(data["code"])
+                text = "重连失败请手动签到"
         else:
             title = data["data"]["dailyAward"]["title"]
             text = data["data"]["dailyAward"]["subTitle"] + " " + data["data"]["dailyAward"]["beanAward"]["beanCount"]
